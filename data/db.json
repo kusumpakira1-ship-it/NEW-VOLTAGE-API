@@ -1,0 +1,261 @@
+{
+  "devices": [
+    {
+      "id": "DEV-7764526",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "5",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltageThreshold": 180,
+      "createdAt": "2026-09-30T03:44:05.000Z"
+    },
+    {
+      "id": "DEV-7764457",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "4",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltageThreshold": 180,
+      "createdAt": "2026-09-30T03:44:04.000Z"
+    },
+    {
+      "id": "DEV-7764221",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "3",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltageThreshold": 180,
+      "createdAt": "2026-09-30T03:44:02.000Z"
+    },
+    {
+      "id": "DEV-7764111",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "2",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltageThreshold": 180,
+      "createdAt": "2026-09-30T03:44:01.000Z"
+    },
+    {
+      "id": "DEV-7763975",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "1",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltageThreshold": 180,
+      "createdAt": "2026-09-30T03:43:59.000Z"
+    }
+  ],
+  "voltageLogs": [
+    {
+      "id": "LOG-834454",
+      "timestamp": "2026-10-01 11:30:54",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "5",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 22.6,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-834453",
+      "timestamp": "2026-10-01 11:30:53",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "4",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 8.8,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-834451",
+      "timestamp": "2026-10-01 11:30:51",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "3",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 231.3,
+      "status": "POWER ON"
+    },
+    {
+      "id": "LOG-834450",
+      "timestamp": "2026-10-01 11:30:50",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "2",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 14.1,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-834448",
+      "timestamp": "2026-10-01 11:30:48",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "1",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 244.8,
+      "status": "POWER ON"
+    },
+    {
+      "id": "LOG-42631367",
+      "timestamp": "2026-10-01 11:30:26",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "Motor 1",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 242.1,
+      "status": "POWER ON"
+    },
+    {
+      "id": "LOG-834156",
+      "timestamp": "2026-10-01 11:25:56",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "5",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 22.4,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-834154",
+      "timestamp": "2026-10-01 11:25:54",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "4",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 8.4,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-834152",
+      "timestamp": "2026-10-01 11:25:52",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "3",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 232,
+      "status": "POWER ON"
+    },
+    {
+      "id": "LOG-834150",
+      "timestamp": "2026-10-01 11:25:50",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "2",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 13,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-834148",
+      "timestamp": "2026-10-01 11:25:48",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "1",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 246.5,
+      "status": "POWER ON"
+    },
+    {
+      "id": "LOG-833866",
+      "timestamp": "2026-10-01 11:21:06",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "5",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 25.4,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-833864",
+      "timestamp": "2026-10-01 11:21:04",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "4",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 8.6,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-833860",
+      "timestamp": "2026-10-01 11:21:00",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "3",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 232,
+      "status": "POWER ON"
+    },
+    {
+      "id": "LOG-833854",
+      "timestamp": "2026-10-01 11:20:54",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "2",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 17.1,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-833850",
+      "timestamp": "2026-10-01 11:20:50",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "1",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 245,
+      "status": "POWER ON"
+    },
+    {
+      "id": "LOG-833560",
+      "timestamp": "2026-10-01 11:16:00",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "5",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 28.5,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-833558",
+      "timestamp": "2026-10-01 11:15:58",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "4",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 10.3,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-833555",
+      "timestamp": "2026-10-01 11:15:55",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "3",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 231.3,
+      "status": "POWER ON"
+    },
+    {
+      "id": "LOG-833552",
+      "timestamp": "2026-10-01 11:15:52",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "2",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 15.7,
+      "status": "POWER OFF"
+    },
+    {
+      "id": "LOG-833548",
+      "timestamp": "2026-10-01 11:15:48",
+      "macAddress": "9C-9C-1F-07-45-98",
+      "motorId": "1",
+      "location": "Farm Station",
+      "deviceType": "ESP32 Voltage Sensor",
+      "voltage": 244.7,
+      "status": "POWER ON"
+    }
+  ]
+}

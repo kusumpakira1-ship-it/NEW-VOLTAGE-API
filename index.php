@@ -1,0 +1,419 @@
+<?php
+// index.php - Main Dashboard UI for Voltage Sensor API System (PHP Version)
+require_once __DIR__ . '/db.php';
+$db = loadDb();
+$totalDevices = count($db['devices']);
+$totalLogs = count($db['voltageLogs']);
+?>
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voltage Sensor & Motor Monitoring API | PHP Dashboard</title>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Animated Glow Spheres -->
+  <div class="glow-bg">
+    <div class="glow-sphere sphere-1"></div>
+    <div class="glow-sphere sphere-2"></div>
+    <div class="glow-sphere sphere-3"></div>
+  </div>
+
+  <div class="app-container">
+    
+    <!-- Top Navigation & Brand Header -->
+    <header class="navbar">
+      <div class="brand">
+        <div class="brand-icon">
+          <i class="fa-solid fa-bolt-lightning"></i>
+        </div>
+        <div class="brand-text">
+          <h1>VOLTAGE API <span>MONITOR (PHP)</span></h1>
+          <p class="subtitle">Industrial Sensor &amp; Motor Power Telemetry System</p>
+        </div>
+      </div>
+
+      <div class="nav-status-group">
+        <div class="server-badge active" id="serverBadge">
+          <span class="status-pulse"></span>
+          <i class="fa-brands fa-php"></i> PHP Server: <strong>ACTIVE</strong>
+        </div>
+
+        <button class="btn btn-outline" id="btnThemeToggle" title="Toggle Light / Dark Mode">
+          <i class="fa-solid fa-sun"></i> Light Theme
+        </button>
+
+        <button class="btn btn-primary" id="btnClickDevice">
+          <i class="fa-solid fa-microchip"></i> Click Device / Add Sensor
+        </button>
+
+        <button class="btn btn-secondary" id="btnQuickPost">
+          <i class="fa-solid fa-paper-plane"></i> Quick POST Test
+        </button>
+
+        <button class="btn btn-outline" id="btnCopyApiLink" title="Copy POST API URL">
+          <i class="fa-solid fa-link"></i> Copy POST API Link
+        </button>
+      </div>
+    </header>
+
+    <!-- KPI Summary Grid -->
+    <section class="kpi-grid">
+      <div class="kpi-card" id="cardTotalDevices">
+        <div class="kpi-header">
+          <span class="kpi-title">TOTAL REGISTERED SENSORS</span>
+          <div class="kpi-icon icon-cyan"><i class="fa-solid fa-network-wired"></i></div>
+        </div>
+        <div class="kpi-value" id="kpiDevicesCount"><?= $totalDevices ?></div>
+        <div class="kpi-footer"><i class="fa-solid fa-microchip"></i> Active Devices in Database</div>
+      </div>
+
+      <div class="kpi-card glow-green" id="cardPowerOn">
+        <div class="kpi-header">
+          <span class="kpi-title">MOTORS POWER ON</span>
+          <div class="kpi-icon icon-green"><i class="fa-solid fa-plug-circle-check"></i></div>
+        </div>
+        <div class="kpi-value text-green" id="kpiPowerOnCount">0</div>
+        <div class="kpi-footer"><i class="fa-solid fa-circle-check"></i> Voltage &ge; 180V (Power ON)</div>
+      </div>
+
+      <div class="kpi-card glow-red" id="cardPowerOff">
+        <div class="kpi-header">
+          <span class="kpi-title">MOTORS POWER OFF</span>
+          <div class="kpi-icon icon-red"><i class="fa-solid fa-plug-circle-xmark"></i></div>
+        </div>
+        <div class="kpi-value text-red" id="kpiPowerOffCount">0</div>
+        <div class="kpi-footer"><i class="fa-solid fa-triangle-exclamation"></i> Voltage &lt; 80V (Power OFF)</div>
+      </div>
+
+      <div class="kpi-card" id="cardTotalLogs">
+        <div class="kpi-header">
+          <span class="kpi-title">TELEMETRY LOGS</span>
+          <div class="kpi-icon icon-purple"><i class="fa-solid fa-database"></i></div>
+        </div>
+        <div class="kpi-value" id="kpiLogsCount"><?= $totalLogs ?></div>
+        <div class="kpi-footer" id="kpiLastUpdate">Last update: --</div>
+      </div>
+    </section>
+
+    <!-- POST API Endpoint Banner & Interactive Tester -->
+    <section class="api-banner-card">
+      <div class="api-banner-header">
+        <div class="api-title-group">
+          <span class="method-tag post">POST</span>
+          <code class="api-endpoint-url" id="postEndpointText">api.php?endpoint=voltage-logs</code>
+        </div>
+        <div class="api-actions">
+          <button class="btn btn-sm btn-outline" id="btnTogglePlayground">
+            <i class="fa-solid fa-code"></i> Toggle API Playground &amp; Payload
+          </button>
+        </div>
+      </div>
+
+      <div class="api-playground" id="apiPlayground" style="display: none;">
+        <div class="playground-grid">
+          <div class="playground-code-box">
+            <div class="code-header">
+              <span><i class="fa-solid fa-json"></i> Sample JSON POST Payload</span>
+              <button class="btn-copy-code" id="btnCopyPayloadJson"><i class="fa-regular fa-copy"></i> Copy JSON</button>
+            </div>
+            <pre><code id="jsonPayloadCode">{
+  "macAddress": "00-1B-44-11-3A-B7",
+  "voltage": 234.50,
+  "timestamp": "<?= date('Y-m-d H:i:s') ?>"
+}</code></pre>
+          </div>
+
+          <div class="playground-code-box">
+            <div class="code-header">
+              <span><i class="fa-solid fa-terminal"></i> cURL Command for Hardware / ESP32 / Python</span>
+              <button class="btn-copy-code" id="btnCopyCurl"><i class="fa-regular fa-copy"></i> Copy cURL</button>
+            </div>
+            <pre><code id="curlCommandCode">curl -X POST "http://localhost/api.php?endpoint=voltage-logs" \
+  -H "Content-Type: application/json" \
+  -d '{"macAddress":"00-1B-44-11-3A-B7", "voltage": 234.5}'</code></pre>
+          </div>
+        </div>
+
+        <div class="playground-tester">
+          <h4><i class="fa-solid fa-vial"></i> Send Live POST Request from Browser:</h4>
+          <form id="formSendPostTest" class="form-row-inline">
+            <div class="form-group">
+              <label>MAC Address (- format)</label>
+              <select id="testMacSelect" class="form-control"></select>
+            </div>
+            <div class="form-group">
+              <label>Voltage (V)</label>
+              <input type="number" step="0.1" id="testVoltageInput" class="form-control" value="230.0" required>
+            </div>
+            <div class="form-group align-end">
+              <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> Send POST Request</button>
+            </div>
+          </form>
+          <div id="testPostResult" class="test-result-box" style="display: none;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Customization for Selection of Dates & Filter Controls -->
+    <section class="filter-card">
+      <div class="filter-header">
+        <h3><i class="fa-solid fa-sliders"></i> Filter &amp; Customization for Selection of Dates</h3>
+        <span class="filter-subtitle" id="filterSummaryText">Showing all timestamped records</span>
+      </div>
+
+      <div class="date-preset-chips">
+        <span class="chip-label"><i class="fa-solid fa-calendar-day"></i> Quick Date Presets:</span>
+        <button class="chip active" data-preset="all">All Dates</button>
+        <button class="chip" data-preset="today">Today</button>
+        <button class="chip" data-preset="yesterday">Yesterday</button>
+        <button class="chip" data-preset="7days">Last 7 Days</button>
+        <button class="chip" data-preset="30days">Last 30 Days</button>
+        <button class="chip" data-preset="thisMonth">This Month</button>
+      </div>
+
+      <form id="filterForm" class="filter-grid">
+        <div class="form-group">
+          <label for="startDate"><i class="fa-solid fa-calendar-minus"></i> Start Date</label>
+          <input type="date" id="startDate" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="endDate"><i class="fa-solid fa-calendar-plus"></i> End Date</label>
+          <input type="date" id="endDate" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="filterMac"><i class="fa-solid fa-barcode"></i> MAC Address / Device</label>
+          <select id="filterMac" class="form-control">
+            <option value="ALL">All Devices &amp; MACs</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="filterStatus"><i class="fa-solid fa-power-off"></i> Voltage Status</label>
+          <select id="filterStatus" class="form-control">
+            <option value="ALL">All Statuses (ON &amp; OFF)</option>
+            <option value="POWER ON">⚡ POWER ON ONLY (&ge; 180V)</option>
+            <option value="POWER OFF">⚠️ POWER OFF ONLY (&lt; 80V)</option>
+          </select>
+        </div>
+
+        <div class="form-group search-group">
+          <label for="searchInput"><i class="fa-solid fa-magnifying-glass"></i> Search Logs</label>
+          <input type="text" id="searchInput" class="form-control" placeholder="Search MAC, Motor ID, Location...">
+        </div>
+
+        <div class="form-group align-end flex-row">
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-filter"></i> Apply Filters</button>
+          <button type="button" class="btn btn-outline" id="btnResetFilters"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Table of Voltage Telemetry & Fetched Motor Info -->
+    <section class="table-card">
+      <div class="table-card-header">
+        <div class="table-title">
+          <h3><i class="fa-solid fa-table-list"></i> Voltage Telemetry &amp; Motor Telemetry Records</h3>
+          <span class="badge-count" id="tableRecordCount">0 Records</span>
+        </div>
+
+        <div class="table-actions">
+          <div class="view-mode-group" style="display: inline-flex; gap: 4px; margin-right: 8px;">
+            <button type="button" class="btn btn-sm btn-primary" id="btnViewLatestMotors" title="Show 1 live row per motor updating in-place on screen">
+              <i class="fa-solid fa-gears"></i> Live Motors (In-Place)
+            </button>
+            <button type="button" class="btn btn-sm btn-outline" id="btnViewAllHistory" title="Show all historical database logs">
+              <i class="fa-solid fa-clock-rotate-left"></i> All DB History
+            </button>
+          </div>
+          <button class="btn btn-sm btn-secondary" id="btnSimulateRandom">
+            <i class="fa-solid fa-dice"></i> Simulate Incoming POST Reading
+          </button>
+          <button class="btn btn-sm btn-outline" id="btnExportCsv">
+            <i class="fa-solid fa-file-csv"></i> Export CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table" id="voltageLogsTable">
+          <thead>
+            <tr>
+              <th><i class="fa-solid fa-clock"></i> TIMESTAMP</th>
+              <th><i class="fa-solid fa-barcode"></i> MAC ADDRESS (- format)</th>
+              <th><i class="fa-solid fa-gears"></i> MOTOR ID (Fetched)</th>
+              <th><i class="fa-solid fa-location-dot"></i> LOCATION</th>
+              <th><i class="fa-solid fa-bolt"></i> VOLTAGE (V)</th>
+              <th><i class="fa-solid fa-power-off"></i> STATUS</th>
+              <th><i class="fa-solid fa-screwdriver-wrench"></i> ACTION BUTTONS</th>
+            </tr>
+          </thead>
+          <tbody id="logsTableBody">
+            <!-- Rows injected dynamically by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="noLogsMessage" class="empty-state" style="display: none;">
+        <div class="empty-icon"><i class="fa-solid fa-folder-open"></i></div>
+        <h4>No voltage sensor logs found matching your selected date range or filters!</h4>
+        <p>Try resetting the date customization filter or click "Simulate Incoming POST Reading".</p>
+      </div>
+    </section>
+
+  </div> <!-- /app-container -->
+
+
+  <!-- MODAL 1: "CLICK DEVICE" - REGISTER & MANAGE DEVICES MODAL -->
+  <div class="modal-backdrop" id="modalDevice" style="display: none;">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-microchip"></i> Click Device / Add Sensor with MAC Address</h3>
+        <button class="modal-close" id="btnCloseDeviceModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <form id="formAddDevice" class="device-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="devMacAddress">MAC Address (Will format with -) *</label>
+              <input type="text" id="devMacAddress" class="form-control" placeholder="e.g. 00-1B-44-11-3A-B7 or 001B44113AB7" required>
+              <small class="form-hint">Hyphens '-' are automatically inserted!</small>
+            </div>
+
+            <div class="form-group">
+              <label for="devMotorId">Motor ID (Auto or Custom)</label>
+              <div class="input-with-btn">
+                <input type="text" id="devMotorId" class="form-control" placeholder="e.g. MTR-8005">
+                <button type="button" class="btn btn-sm btn-outline" id="btnGenMotorId"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="devLocation">Location *</label>
+              <input type="text" id="devLocation" class="form-control" placeholder="e.g. Pump Room Alpha, Substation Line 2" required>
+            </div>
+
+            <div class="form-group">
+              <label for="devDeviceType">Type of Motor or Sensor *</label>
+              <select id="devDeviceType" class="form-control">
+                <option value="3-Phase Induction Motor Sensor">3-Phase Induction Motor Sensor</option>
+                <option value="High Voltage Transformer Monitor">High Voltage Transformer Monitor</option>
+                <option value="Submersible Motor Voltage Sensor">Submersible Motor Voltage Sensor</option>
+                <option value="Vibration & Voltage Combo Sensor">Vibration &amp; Voltage Combo Sensor</option>
+                <option value="DC Servo Motor Sensor">DC Servo Motor Sensor</option>
+                <option value="Custom Voltage Sensor">Custom Voltage Sensor</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="devThreshold">Power-ON Voltage Threshold (V)</label>
+              <input type="number" id="devThreshold" class="form-control" value="180" min="1" max="1000">
+              <small class="form-hint">&ge; 180V = POWER ON, &lt; 80V = POWER OFF</small>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Save &amp; Register Device</button>
+          </div>
+        </form>
+
+        <hr class="divider">
+
+        <h4><i class="fa-solid fa-list-check"></i> Registered Devices &amp; Motor Bindings</h4>
+        <div class="device-cards-grid" id="registeredDevicesGrid">
+          <!-- Injected via JavaScript -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- MODAL 2: VOLTAGE HISTORY GRAPH / CHART MODAL -->
+  <div class="modal-backdrop" id="modalChart" style="display: none;">
+    <div class="modal-container modal-lg">
+      <div class="modal-header">
+        <h3 id="chartModalTitle"><i class="fa-solid fa-chart-line"></i> Device Voltage Telemetry History</h3>
+        <button class="modal-close" id="btnCloseChartModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="chart-wrapper">
+          <canvas id="voltageAnalyticsChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: EDIT VOLTAGE LOG MODAL -->
+  <div class="modal-backdrop" id="modalEditLog" style="display: none;">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-pen-to-square"></i> Edit Voltage Sensor Record</h3>
+        <button class="modal-close" id="btnCloseEditModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="formEditLog">
+          <input type="hidden" id="editLogId">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="editMacAddress">MAC Address (- format) *</label>
+              <input type="text" id="editMacAddress" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="editMotorId">Motor ID (Fetched) *</label>
+              <input type="text" id="editMotorId" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="editLocation">Location *</label>
+              <input type="text" id="editLocation" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="editVoltage">Voltage (V) *</label>
+              <input type="number" step="0.1" id="editVoltage" class="form-control" required>
+              <small class="form-hint">&ge; 180V = POWER ON, &lt; 80V = POWER OFF</small>
+            </div>
+            <div class="form-group">
+              <label for="editTimestamp">Timestamp *</label>
+              <input type="text" id="editTimestamp" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="editStatus">Status Override</label>
+              <select id="editStatus" class="form-control">
+                <option value="POWER ON">⚡ POWER ON</option>
+                <option value="POWER OFF">⚠️ POWER OFF</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions" style="margin-top:16px;">
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast" style="display: none;">
+    <i class="toast-icon fa-solid fa-circle-check"></i>
+    <span id="toastMessage">Notification message</span>
+  </div>
+
+  <script src="app.js?v=<?= time() ?>"></script>
+</body>
+</html>
